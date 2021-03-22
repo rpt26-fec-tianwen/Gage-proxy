@@ -11,35 +11,22 @@ app.get('/:id', (req,res) => {
   var settings = {url: 'string',params: {indicator: 'all'}}
   var productId = req.params.id
   var melissaUrl = `http://localhost:8003/${productId}`
-  var marlonUrl = `http://localhost:8001/id:${productId}`
-  console.log('id -> ', productId)
-  console.log('params -> ', req.params)
-    axios.get(marlonUrl, settings)
-    .then((data) => {
-      console.log('data ->', data.data)
-      // res.send(data.data)
-      res.send(data.data)
-    })
-    .catch((err) => {
-      console.log('err from resp -> ', err)
-      res.end()
-  })
-  // res.end()
-  console.log('here ->',req.query )
-
+  var marlonUrl = `http://localhost:8001/${productId}`
+  // console.log('id -> ', productId)
+  // console.log('params -> ', req.params)
+  // console.log('here ->',req.query)
   if (req.query.service === 'details') {
     var jamesUrl = `http://localhost:3001/${productId}`
     var settings = {url: 'string',params: {indicator: 'all'}}
-    axios.get(jamesUrl,settings).then((data) => {res.send(data.data)})
+    axios.get(jamesUrl,settings).
+    then((data) => {res.send(data.data)})
     .catch((err) => {console.log('err from resp -> ', err);res.end()})
   } else {
     res.sendFile(path.join(__dirname, 'index.html'))
   }
-
 })
 
 app.post('/:id', (req,res) => {
-
   var id = req.params.id
   var gageUrl = `http://localhost:3000/${id}`
   axios.post(gageUrl)
