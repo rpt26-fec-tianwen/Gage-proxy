@@ -15,6 +15,19 @@ app.get('/:id', (req,res) => {
   // console.log('id -> ', productId)
   // console.log('params -> ', req.params)
   // console.log('here ->',req.query)
+
+  var melissaService = `http://localhost:8003/related-products/${productId}`
+
+  // axios.get(melissaService,settings)
+  // .then((data)=> {
+  //   console.log('data->', data)
+  //   res.end()
+  // })
+  // .catch((err)=> {
+  //   console.log('err->', err)
+  //   res.end()
+
+  // })
   if (req.query.service === 'details') {
     var jamesUrl = `http://localhost:3001/${productId}`
     var settings = {url: 'string',params: {indicator: 'all'}}
@@ -24,7 +37,21 @@ app.get('/:id', (req,res) => {
   } else {
     res.sendFile(path.join(__dirname, 'index.html'))
   }
+  // res.end()
 })
+app.get('/card/:id', (req, res) => {
+  // console.log('entering')
+  const {host, port, path, productId} = req.query;
+  const route = `http://${host}:${port}${path}${productId}`;
+  return axios.get(route)
+    .then((result) => {
+      const response = JSON.stringify(result.data);
+      res.status(200).send(response);
+    })
+    .catch((error)=> {
+      console.log(error);
+    });
+});
 
 app.post('/:id', (req,res) => {
   var id = req.params.id
