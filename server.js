@@ -6,42 +6,45 @@ var axios = require('axios')
 
 app.use(express.static('/index.html'))
 
+
 app.get('/:id', (req,res) => {
 
   var settings = {url: 'string',params: {indicator: 'all'}}
   var productId = req.params.id
   var melissaUrl = `http://localhost:8003/${productId}`
   var marlonUrl = `http://localhost:8001/${productId}`
-  // console.log('id -> ', productId)
-  // console.log('params -> ', req.params)
-  // console.log('here ->',req.query)
-
   var melissaService = `http://localhost:8003/related-products/${productId}`
+  res.sendFile(path.join(__dirname, 'index.html'))
 
-  // axios.get(melissaService,settings)
-  // .then((data)=> {
-  //   console.log('data->', data)
-  //   res.end()
-  // })
-  // .catch((err)=> {
-  //   console.log('err->', err)
-  //   res.end()
-
-  // })
-  if (req.query.service === 'details') {
-    var jamesUrl = `http://localhost:3001/${productId}`
+})
+app.get('/details/:id', (req,res) => {
+  console.log('entering james')
+    var productId = req.params.id
+    var jamesUrl = `http://3.138.79.75/details/${productId}`
     var settings = {url: 'string',params: {indicator: 'all'}}
     axios.get(jamesUrl,settings).
     then((data) => {res.send(data.data)})
     .catch((err) => {console.log('err from resp -> ', err);res.end()})
-  } else {
-    res.sendFile(path.join(__dirname, 'index.html'))
-  }
-  // res.end()
 })
+
+app.get('/related-products/:id', (req, res, next) => {
+  console.log('entering mellissa')
+
+  console.log('PROXY /related-products/:id ', req.params.id);
+  axios.get(`http://3.129.111.96:8003/related-products/${req.params.id}`, { params: { id: req.params.id } })
+    .then((relatedData) => {
+      console.log('melissa data ->', relatedData.data)
+      res.send(relatedData.data);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+});
+
 app.get('/card/:id', (req, res) => {
-  // console.log('entering')
+  console.log('entering')
   const {host, port, path, productId} = req.query;
+  console.log('req.query -> ',req.query )
   const route = `http://${host}:${port}${path}${productId}`;
   return axios.get(route)
     .then((result) => {
@@ -55,7 +58,7 @@ app.get('/card/:id', (req, res) => {
 
 app.post('/:id', (req,res) => {
   var id = req.params.id
-  var gageUrl = `http://localhost:3000/${id}`
+  var gageUrl = `http://54.183.205.73:8004/${id}`
   axios.post(gageUrl)
   .then((data) => {res.send(data.data)})
   .catch((err) => {

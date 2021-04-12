@@ -1,0 +1,8 @@
+version: '3'
+services:
+  gage-service:
+    image: reviews-service
+    build: .
+    command: "node server.js"
+    ports:
+      - "5000:5000"

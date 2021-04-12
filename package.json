@@ -1,0 +1,22 @@
+{
+  "name": "proxy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js",
+    "start-james": "nodemon ../../james-service-1/server/server.js",
+    "start-marlon": "nodemon ../../marlon-service-1/server/index.js",
+    "start-melissa": "nodemon ../../melissa-service-1/server/server.js",
+    "start-gage": "nodemon ../../Gage-tbd-service/server.js",
+    "start-all": "npm start & npm run start-melissa & npm run start-gage & npm run start-marlon"
+  },
+  "author": "Gage",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7"
+  }
+}
